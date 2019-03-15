@@ -1,2 +1,1 @@
-# slack
-🚀 Slack Rebuild | Slack Rebuild from scratch 
+Hello World! - This is a react app.
