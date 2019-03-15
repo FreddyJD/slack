@@ -1,0 +1,17 @@
+html,
+
+body,
+
+.app{
+    background: url(/bg.jpg) repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+     background-size: cover;
+}
+
+.form-field{
+    height: 100vh;
+    /* background: #eee; */
+    padding: 1em;
+}
