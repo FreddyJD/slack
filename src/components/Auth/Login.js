@@ -1,4 +1,5 @@
-import React, { Component } from "react";
+import React from "react";
+import firebase from "../../firebase";
 import {
   Grid,
   Form,
@@ -9,72 +10,76 @@ import {
   Icon
 } from "semantic-ui-react";
 import { Link } from "react-router-dom";
-import firebase from "../../firebase";
 
-
-
-export default class login extends Component {
+class Login extends React.Component {
   state = {
-    mail: "",
+    email: "",
     password: "",
     errors: [],
-    loading: false,
+    loading: false
   };
+
+  displayErrors = errors =>
+    errors.map((error, i) => <p key={i}>{error.message}</p>);
 
   handleChange = event => {
     this.setState({ [event.target.name]: event.target.value });
   };
+
   handleSubmit = event => {
     event.preventDefault();
-    if(this.isFormValid(this.state)) {
-      this.setState({errors: [], loading: true})
-
-      firebase.auth().signInWithEmailAndPassword(this.state.mail, this.state.password)
-      .then(signInUser => { 
-        console.log(signInUser); 
-        this.setState({loading: false })
-
-      })
-      .catch(err => {
-        console.error(err)
-        this.setState({loading: false, errors: this.state.errors.concat(err) })
-      })
+    if (this.isFormValid(this.state)) {
+      this.setState({ errors: [], loading: true });
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(this.state.email, this.state.password)
+        .then(signedInUser => {
+          console.log(signedInUser);
+        })
+        .catch(err => {
+          console.error(err);
+          this.setState({
+            errors: this.state.errors.concat(err),
+            loading: false
+          });
+        });
     }
   };
 
-  isFormValid = ({mail, password}) => mail && password
+  isFormValid = ({ email, password }) => email && password;
 
-
-  displayError = errors => errors.map((error) => `${error.message}`);
-
+  handleInputError = (errors, inputName) => {
+    return errors.some(error => error.message.toLowerCase().includes(inputName))
+      ? "error"
+      : "";
+  };
 
   render() {
-    const { password, mail, errors, loading } = this.state;
+    const { email, password, errors, loading } = this.state;
 
     return (
-      <div className="app">
-      <Grid textAlign="center" verticalAlign="middle" className="form-field">
-        <Grid.Column style={{ maxWidth: 560 }}>
-          <Header as="h1" textAlign="center">
-            Slack Dev's ⭐
+      <Grid textAlign="center" verticalAlign="middle" className="app">
+        <Grid.Column style={{ maxWidth: 450 }}>
+          <Header as="h1" icon color="white" textAlign="center">
+            <Icon inverted name="slack" color="white" />
           </Header>
           {errors.length > 0 && (
-            <Message error>
-              <h3>Ops! </h3>
-              {this.displayError(errors)}
-            </Message>)}
-          <Form size="large" onSubmit={this.handleSubmit}>
-            <Segment stacked>
+            <Message negative>
+              {this.displayErrors(errors)}
+            </Message>
+          )}
+          <Form onSubmit={this.handleSubmit} size="large">
+            <Segment raised>
               <Form.Input
                 fluid
-                name="mail"
+                name="email"
                 icon="mail"
                 iconPosition="left"
-                placeholder="mail"
+                placeholder="Email Address"
                 onChange={this.handleChange}
-                type="mail"
-                className={errors.some(error => error.message.toLowerCase().includes('email')) ? 'error' : ''}
-                value={mail}
+                value={email}
+                className={this.handleInputError(errors, "email")}
+                type="email"
               />
 
               <Form.Input
@@ -84,24 +89,30 @@ export default class login extends Component {
                 iconPosition="left"
                 placeholder="Password"
                 onChange={this.handleChange}
-                type="password"
-                className={errors.some(error => error.message.toLowerCase().includes('password')) ? 'error' : ''}
                 value={password}
+                className={this.handleInputError(errors, "password")}
+                type="password"
               />
 
-              <Button 
-              disabled={loading}
-              className={loading ? 'loading' : ''}color="blue" fluid size="large">
+              <Button
+                inverted
+                disabled={loading}
+                className={loading ? "loading" : ""}
+                color="violet"
+                fluid
+                size="large"
+              >
                 Login
               </Button>
             </Segment>
-            <Message>
-              Don't have an account? <Link to="/register"> Register</Link>
-            </Message>
           </Form>
+          <p className="simple_text">
+            You don't have an account 🙉? <Link className="simple_text" to="/register">Register</Link>
+          </p>
         </Grid.Column>
       </Grid>
-      </div>
     );
   }
 }
+
+export default Login;

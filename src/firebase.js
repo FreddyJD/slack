@@ -1,16 +1,17 @@
 import firebase from 'firebase/app';
 import "firebase/auth";
 import "firebase/database";
-import "firebase/storage"; 
+import "firebase/storage";
+
 
 var config = {
-    apiKey: "XXXXXXXXX",
-    authDomain: "XXXXXXX.firebaseapp.com",
-    databaseURL: "https://XXXXXX.firebaseio.com",
-    projectId: "XXXXXXXXX",
-    storageBucket: "gs://XXXXXXX.appspot.com/",
-    messagingSenderId: "XXXXXXX"
-  };
-  firebase.initializeApp(config);
+    apiKey: "XXXXXX",
+    authDomain: "sXXXXX.XXXXXX.com",
+    databaseURL: "https://XXXXXX.com",
+    projectId: "sXXXXXXX",
+    storageBucket: "xXXXXXX2XXXXappspXXot.com/",
+    messagingSenderId: "XXXXXXXXXXX"
+};
+firebase.initializeApp(config);
 
-  export default firebase
+export default firebase;
